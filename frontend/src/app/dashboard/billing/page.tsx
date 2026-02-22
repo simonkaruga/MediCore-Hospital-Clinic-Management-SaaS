@@ -2,10 +2,12 @@
 
 import { useState, useEffect } from 'react';
 import apiClient from '@/lib/api-client';
+import PrintInvoice from '@/components/PrintInvoice';
 
 export default function BillingPage() {
   const [invoices, setInvoices] = useState<any[]>([]);
   const [filter, setFilter] = useState('ALL');
+  const [printInvoice, setPrintInvoice] = useState<any>(null);
 
   useEffect(() => {
     fetchInvoices();
@@ -119,11 +121,25 @@ export default function BillingPage() {
                       <p className="text-sm text-gray-600">Balance: <span className="font-bold text-red-600">KES {(invoice.totalAmount - invoice.paidAmount).toLocaleString()}</span></p>
                     )}
                   </div>
+                  <button
+                    onClick={() => setPrintInvoice(invoice)}
+                    className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-semibold"
+                  >
+                    Print Invoice
+                  </button>
                 </div>
               </div>
             </div>
           ))}
         </div>
+      )}
+
+      {printInvoice && (
+        <PrintInvoice
+          invoice={printInvoice}
+          patient={printInvoice.visit.patient}
+          onClose={() => setPrintInvoice(null)}
+        />
       )}
     </div>
   );

@@ -87,5 +87,29 @@ export const getPatient = async (req: AuthRequest, res: Response) => {
 };
 
 export const updatePatient = async (req: AuthRequest, res: Response) => {
-  res.status(501).json({ error: 'Not implemented' });
+  try {
+    const { id } = req.params;
+    const { tenantId } = req.user!;
+    const data = createPatientSchema.partial().parse(req.body);
+
+    const patient = await prisma.patient.findFirst({
+      where: { id, tenantId },
+    });
+
+    if (!patient) {
+      return res.status(404).json({ error: 'Patient not found' });
+    }
+
+    const updated = await prisma.patient.update({
+      where: { id },
+      data: {
+        ...data,
+        dateOfBirth: data.dateOfBirth ? new Date(data.dateOfBirth) : undefined,
+      },
+    });
+
+    res.json(updated);
+  } catch (error) {
+    res.status(500).json({ error: 'Internal server error' });
+  }
 };

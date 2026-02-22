@@ -62,12 +62,20 @@ export default function PatientDetailPage() {
             <p className="text-gray-600 mt-1">{patient.patientNumber}</p>
           </div>
         </div>
-        <button
-          onClick={() => router.push(`/dashboard/emr?patientId=${patient.id}`)}
-          className="px-6 py-3 bg-blue-600 text-white rounded-xl hover:bg-blue-700 font-semibold"
-        >
-          Start Consultation
-        </button>
+        <div className="flex space-x-3">
+          <button
+            onClick={() => router.push(`/dashboard/patients/${patient.id}/edit`)}
+            className="px-6 py-3 bg-gray-100 text-gray-700 rounded-xl hover:bg-gray-200 font-semibold"
+          >
+            Edit Patient
+          </button>
+          <button
+            onClick={() => router.push(`/dashboard/emr?patientId=${patient.id}`)}
+            className="px-6 py-3 bg-blue-600 text-white rounded-xl hover:bg-blue-700 font-semibold"
+          >
+            Start Consultation
+          </button>
+        </div>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">

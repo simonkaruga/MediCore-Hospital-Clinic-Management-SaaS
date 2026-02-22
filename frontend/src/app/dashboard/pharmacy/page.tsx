@@ -1,6 +1,7 @@
 'use client';
 import { useEffect, useState } from 'react';
 import apiClient from '@/lib/api-client';
+import PrintPrescription from '@/components/PrintPrescription';
 
 interface Prescription {
   id: string;
@@ -34,6 +35,7 @@ export default function PharmacyPage() {
   const [inventory, setInventory] = useState<any[]>([]);
   const [filter, setFilter] = useState('PENDING');
   const [loading, setLoading] = useState(true);
+  const [printPrescription, setPrintPrescription] = useState<any>(null);
 
   useEffect(() => {
     fetchPrescriptions();
@@ -213,16 +215,40 @@ export default function PharmacyPage() {
               )}
 
               {rx.status === 'PENDING' && (
+                <div className="mt-4 flex space-x-3">
+                  <button
+                    onClick={() => setPrintPrescription(rx)}
+                    className="flex-1 px-4 py-3 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 font-semibold transition-all"
+                  >
+                    Print
+                  </button>
+                  <button
+                    onClick={() => dispensePrescription(rx.id)}
+                    className="flex-1 px-4 py-3 bg-gradient-to-r from-teal-600 to-cyan-600 text-white rounded-lg hover:from-teal-700 hover:to-cyan-700 font-semibold transition-all"
+                  >
+                    Dispense Medication
+                  </button>
+                </div>
+              )}
+              {rx.status === 'DISPENSED' && (
                 <button
-                  onClick={() => dispensePrescription(rx.id)}
-                  className="mt-4 w-full px-4 py-3 bg-gradient-to-r from-teal-600 to-cyan-600 text-white rounded-lg hover:from-teal-700 hover:to-cyan-700 font-semibold transition-all"
+                  onClick={() => setPrintPrescription(rx)}
+                  className="mt-4 w-full px-4 py-3 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 font-semibold transition-all"
                 >
-                  Dispense Medication
+                  Print
                 </button>
               )}
             </div>
           ))}
         </div>
+      )}
+
+      {printPrescription && (
+        <PrintPrescription
+          prescription={printPrescription}
+          patient={printPrescription.visit.patient}
+          onClose={() => setPrintPrescription(null)}
+        />
       )}
     </div>
   );
