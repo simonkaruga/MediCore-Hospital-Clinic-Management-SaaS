@@ -205,7 +205,7 @@ export default function LoginPage() {
           </div>
           
           <p className="text-center text-gray-500 text-sm mt-6">
-            © 2024 MediCore. Secure Healthcare Management.
+            © 2026 MediCore. Secure Healthcare Management.
           </p>
         </div>
       </div>
